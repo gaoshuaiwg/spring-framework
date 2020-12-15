@@ -150,12 +150,10 @@ public abstract class AbstractResource implements Resource {
 	}
 
 	/**
-	 * This method reads the entire InputStream to determine the content length.
-	 * <p>For a custom sub-class of {@code InputStreamResource}, we strongly
-	 * recommend overriding this method with a more optimal implementation, e.g.
-	 * checking File length, or possibly simply returning -1 if the stream can
-	 * only be read once.
-	 * @see #getInputStream()
+	 * 获取资源的长度
+	 *   这个资源的长度实际上就是资源的字节长度，通过全部读取一遍来判断
+	 * @return  字节数
+	 * @throws IOException 抛出IO 异常
 	 */
 	@Override
 	public long contentLength() throws IOException {
@@ -183,9 +181,9 @@ public abstract class AbstractResource implements Resource {
 	}
 
 	/**
-	 * This implementation checks the timestamp of the underlying File,
-	 * if available.
-	 * @see #getFileForLastModifiedCheck()
+	 *
+	 * @return              返回资源最后的修改时间
+	 * @throws IOException
 	 */
 	@Override
 	public long lastModified() throws IOException {
@@ -220,8 +218,8 @@ public abstract class AbstractResource implements Resource {
 	}
 
 	/**
-	 * This implementation always returns {@code null},
-	 * assuming that this resource type does not have a filename.
+	 * 获取资源名称 默认返回 NULL  交由子类实现
+	 * @return  NULL
 	 */
 	@Override
 	@Nullable

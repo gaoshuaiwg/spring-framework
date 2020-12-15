@@ -125,7 +125,9 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		// the new (child) delegate with a reference to the parent for fallback purposes,
 		// then ultimately reset this.delegate back to its original (parent) reference.
 		// this behavior emulates a stack of delegates without actually necessitating one.
+		//记录老的BeanDefinitionParserDelegate对象
 		BeanDefinitionParserDelegate parent = this.delegate;
+		//创建BeanDefinitionParserDelegate 对象，并设置到 delegate
 		this.delegate = createDelegate(getReaderContext(), root, parent);
 
 		if (this.delegate.isDefaultNamespace(root)) {
@@ -207,20 +209,23 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * from the given resource into the bean factory.
 	 */
 	protected void importBeanDefinitionResource(Element ele) {
+		//1.获取import 标签中的 resource 值
 		String location = ele.getAttribute(RESOURCE_ATTRIBUTE);
+		//2.为空直接退出
 		if (!StringUtils.hasText(location)) {
 			getReaderContext().error("Resource location must not be empty", ele);
 			return;
 		}
-
+		//3.解析系统属性 比如： ${user.dir}
 		// Resolve system properties: e.g. "${user.dir}"
 		location = getReaderContext().getEnvironment().resolveRequiredPlaceholders(location);
-
+		//实际的 resource 集合，里边是import 的资源
 		Set<Resource> actualResources = new LinkedHashSet<>(4);
 
 		// Discover whether the location is an absolute or relative URI
 		boolean absoluteLocation = false;
 		try {
+			//4.判断location是绝对路径还是相对路径
 			absoluteLocation = ResourcePatternUtils.isUrl(location) || ResourceUtils.toURI(location).isAbsolute();
 		}
 		catch (URISyntaxException ex) {
@@ -228,7 +233,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			// unless it is the well-known Spring prefix "classpath*:"
 		}
 
-		// Absolute or relative?
+		//绝对路径  ? 相对路径
 		if (absoluteLocation) {
 			try {
 				int importCount = getReaderContext().getReader().loadBeanDefinitions(location, actualResources);

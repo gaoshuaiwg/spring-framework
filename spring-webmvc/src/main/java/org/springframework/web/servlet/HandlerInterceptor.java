@@ -85,6 +85,7 @@ public interface HandlerInterceptor {
 	 * request processing. For more details see
 	 * {@link org.springframework.web.servlet.AsyncHandlerInterceptor}.
 	 * <p>The default implementation returns {@code true}.
+	 * <p>拦截处理器，在{@link HandlerAdapter#handle(HttpServletRequest, HttpServletResponse, Object)}执行成功之后执行</p>
 	 * @param request current HTTP request
 	 * @param response current HTTP response
 	 * @param handler chosen handler to execute, for type and/or instance evaluation
@@ -93,6 +94,7 @@ public interface HandlerInterceptor {
 	 * that this interceptor has already dealt with the response itself.
 	 * @throws Exception in case of errors
 	 */
+	
 	default boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 
@@ -111,6 +113,9 @@ public interface HandlerInterceptor {
 	 * request processing. For more details see
 	 * {@link org.springframework.web.servlet.AsyncHandlerInterceptor}.
 	 * <p>The default implementation is empty.
+	 * <p>拦截处理器，在{@link HandlerAdapter#handle(HttpServletRequest, HttpServletResponse, Object)}
+	 * 执行完之后执行，无论成功、失败。并且只有处理器{@link #preHandle(HttpServletRequest, HttpServletResponse, Object)}
+	 * 执行成功之后执行 </p>
 	 * @param request current HTTP request
 	 * @param response current HTTP response
 	 * @param handler the handler (or {@link HandlerMethod}) that started asynchronous
@@ -136,6 +141,7 @@ public interface HandlerInterceptor {
 	 * request processing. For more details see
 	 * {@link org.springframework.web.servlet.AsyncHandlerInterceptor}.
 	 * <p>The default implementation is empty.
+	 * <p>在Controller执行之后执行，e.g : 页面渲染</p>
 	 * @param request current HTTP request
 	 * @param response current HTTP response
 	 * @param handler the handler (or {@link HandlerMethod}) that started asynchronous
